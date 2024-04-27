@@ -98,7 +98,7 @@ for i in range(IMAGE_COUNT):
     yWallyCoordinate = np.random.randint(0, backHeight - wallyHeight)
 
     cropBackgroundImage.paste(finalWallyImage, (xWallyCoordinate, yWallyCoordinate), mask=finalWallyImage)
-    #print("Creando Imagen: " + str(i) + " con Background " + str(backVarIndex) + " y wally " + str(wallyVarIndex))
+    print("Creando Imagen: " + str(i) + " con Background " + str(backVarIndex) + " y wally " + str(wallyVarIndex) + " " + str(wallyWidth) + " " + str(wallyHeight))
     
     wallyCoordinatesLog.write(str(xWallyCoordinate) + " " + str(yWallyCoordinate) + "\n")
     
