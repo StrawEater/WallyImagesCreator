@@ -1,4 +1,4 @@
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageFilter
 import numpy as np 
 import os.path
 import os
@@ -21,6 +21,8 @@ WALLY_IMAGE_HEIGHT_RANDOM_VAR = 0
 WALLY_IMAGE_VARIABLES = [0, 1, 2, 3]
 BACKGROUND_IMAGE_VARIABLES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
+WALLY_BLUR = 0.5
+
 #Cargamos los posibles fondos
 backgroundImages = []
 for i in range(len(BACKGROUND_IMAGE_VARIABLES)):
@@ -38,15 +40,14 @@ for i in range(len(WALLY_IMAGE_VARIABLES)):
     
     if wallyImageBaseWidth <= 150:
         imageSrc = WALLY_DIR + "/150x400/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
-        wallyImages.append(Image.open(imageSrc).convert('RGBA'))
-
+        
     elif wallyImageBaseWidth <= 300:
-        imageSrc = WALLY_DIR + "/300x800/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
-        wallyImages.append(Image.open(imageSrc))
-    
+        imageSrc = WALLY_DIR + "/600x1600/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
+        
     else:
         imageSrc = WALLY_DIR + "/600x1600/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
-        wallyImages.append(Image.open(imageSrc))
+
+    wallyImages.append(Image.open(imageSrc).convert('RGBA'))
 
 #Borramos el archivo de coordenadas viejas si existia
 if os.path.exists("wallyCoordinate.txt"):
@@ -90,6 +91,8 @@ for i in range(IMAGE_COUNT):
     if np.random.randint(0,2) == 0:
         finalWallyImage = ImageOps.mirror(finalWallyImage)
 
+    finalWallyImage = finalWallyImage.filter(ImageFilter.GaussianBlur(radius = WALLY_BLUR)) 
+
     #PASTE WALLY IN BACKGROUND
     backWidth, backHeight = cropBackgroundImage.size
     wallyWidth, wallyHeight = finalWallyImage.size
@@ -100,7 +103,7 @@ for i in range(IMAGE_COUNT):
     cropBackgroundImage.paste(finalWallyImage, (xWallyCoordinate, yWallyCoordinate), mask=finalWallyImage)
     print("Creando Imagen: " + str(i) + " con Background " + str(backVarIndex) + " y wally " + str(wallyVarIndex) + " " + str(wallyWidth) + " " + str(wallyHeight))
     
-    wallyCoordinatesLog.write(str(xWallyCoordinate) + " " + str(yWallyCoordinate) + "\n")
+    wallyCoordinatesLog.write(str(xWallyCoordinate) + " " + str(yWallyCoordinate) + " " + str(wallyWidth) + " " + str(wallyHeight)+ "\n")
     
     cropBackgroundImage.save(RESULT_DIR + "/prueba" + str(i) + ".png", quality=95)
 
