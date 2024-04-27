@@ -25,6 +25,9 @@ WALLY_BLUR = 0.5
 
 WALLY_MAX_RESOLUTION = True
 
+if not os.path.exists(RESULT_DIR):
+    os.mkdir(RESULT_DIR) 
+
 #Cargamos los posibles fondos
 backgroundImages = []
 for i in range(len(BACKGROUND_IMAGE_VARIABLES)):
