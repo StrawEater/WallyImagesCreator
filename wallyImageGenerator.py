@@ -23,6 +23,8 @@ BACKGROUND_IMAGE_VARIABLES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
 WALLY_BLUR = 0.5
 
+WALLY_MAX_RESOLUTION = True
+
 #Cargamos los posibles fondos
 backgroundImages = []
 for i in range(len(BACKGROUND_IMAGE_VARIABLES)):
@@ -38,14 +40,17 @@ wallyImageBaseHeight = round(BACKGROUND_HEIGHT * WALLY_IMAGE_HEIGHT_RATIO)
 wallyImages = []
 for i in range(len(WALLY_IMAGE_VARIABLES)):
     
-    if wallyImageBaseWidth <= 150:
-        imageSrc = WALLY_DIR + "/150x400/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
-        
-    elif wallyImageBaseWidth <= 300:
+    if (WALLY_MAX_RESOLUTION):
         imageSrc = WALLY_DIR + "/600x1600/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
-        
     else:
-        imageSrc = WALLY_DIR + "/600x1600/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
+        if wallyImageBaseWidth <= 150:
+            imageSrc = WALLY_DIR + "/150x400/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
+            
+        elif wallyImageBaseWidth <= 300:
+            imageSrc = WALLY_DIR + "/300x800/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
+            
+        else:
+            imageSrc = WALLY_DIR + "/600x1600/wally" + str(WALLY_IMAGE_VARIABLES[i]) + ".png"
 
     wallyImages.append(Image.open(imageSrc).convert('RGBA'))
 
